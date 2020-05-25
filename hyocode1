@@ -1,18 +1,8 @@
-
-#####currently fixing not finished
-
-#define constants
-S_0<-50
-T<-1
-
-sigma<-0.13
-r<-0.07
 n<-10000 # sample size
 d<-12 #time size
 delta<-T/d
 grid<-matrix(rep(seq(delta,T,length.out=d),n),nrow=n,byrow=TRUE) #time grid as matrix
-S<-matrix(rep(0,n*(d+1)),nrow=n)#create a matrix to store asset prices
-
+S<-matrix(rep(0,n*(d+1)),nrow=n)#create a matrix to store
 
 #generate n pseudo-random normal numbers (n samples of Brownian motion at maturity)
 X<-rnorm(n)
@@ -20,24 +10,8 @@ Y<-rgamma(n , shape = 0.15, scale = grid / 0.15)
 Q<-sigma*sqrt(Y)*X
 Z<-rnorm(n)
 
-r<-
+# I need help to get the r
+#r[t[j]]=r[t[j-1]]+0.18(0.086-r(t[j-1]))*delta+0.02*sqrt(delta)*Z
 
-S<-cbind(rep(S_0,n),S_0*exp((r-sigma^2/2)*grid+sigma*BM))
-
-
-S_T<-S_0*exp((r-sigma^2/2)*MT+sigma*x)
-
-
-
-#generate n sample stock prices at maturity
-EuroCallPayoff<-pmax(S_T-K,0)*exp(-r*MT)
-EuroPutPayoff<-pmax(K-S_T,0)*exp(-r*MT)
-EuroCallPrice<-mean(EuroCallPayoff)
-EuroPutPrice<-mean(EuroPutPayoff)
-#exact option prices using Black-Scholes formula
-ExactEuroCall<-S_0*pnorm((log(S_0/K)+(r+sigma^2/2)*MT)/(sigma*sqrt(MT)))-K*exp(-r*MT)*pnorm((log(S_0/K)+(r-sigma^2/2)*MT)/(sigma*sqrt(MT)))
-ExactEuroPut<-K*exp(-r*MT)*pnorm((log(K/S_0)-(r-sigma^2/2)*MT)/(sigma*sqrt(MT)))-S_0*pnorm((log(K/S_0)-(r+sigma^2/2)*MT)/(sigma*sqrt(MT)))
-error_EuroPut<-abs(EuroPutPrice-ExactEuroPut)/ExactEuroPut
-error_EuroCall<-abs(EuroCallPrice-ExactEuroCall)/ExactEuroCall
-
-cat("With S(0)=",S_0, ", r=",r,", volatility=",sigma, ", T=", MT, ", K=",K, ", and sample size n=",n, ". The estimated European call option price is" , EuroCallPrice, ", with relative error as", error_EuroCall, ". The estimated European put option price is" , EuroPutPrice, ", with relative error as", error_EuroPut, ". " )
+  
+S<-cbind(rep(S_0,n),S_0*exp((rt+ln(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
