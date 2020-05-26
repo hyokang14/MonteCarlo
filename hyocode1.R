@@ -15,3 +15,5 @@ Z<-rnorm(n)
 
   
 S<-cbind(rep(S_0,n),S_0*exp((rt+ln(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
+
+# Testing comment
