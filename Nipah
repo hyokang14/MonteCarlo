@@ -1,28 +1,31 @@
-S_0<-50 #initial asset price
+
+library(pracma)
+S_0<-50 #inital asset price
 K <-50 #strike price
 T<-1 #maturity size
-r<-0.07 #initial interest rate 
+r<-0.07 #inital interest rate 
 sigma<-0.13 #volatility
-n<-10000 # sample size
+n<-10^4 # sample size
 d<-365   #time size
 delta<-T/d
 grid<-matrix(rep(seq(delta,T,length.out=d),n),nrow=n,byrow=TRUE) #time grid as matrix
 
+R <- r + 0.18(0.086-r)*delta + 0.02*sqrt(delta*Z)# equation of r(t) 
 
 #run ceiling
-N <- 
-X <-runif(N) #uniform random numbers
-Y <- rgamma(n, , rate =0.15, scale = delta/0.15) #gamma distribution
+N <-ceiling(0.76*1.1)  #efficiency (variance rate)
 
+X <-runif(N) #uniform random numbers
+Y <- rgamma(n, , rate =0.15, scale = grid/0.15) #gamma distribution
+Z <- runif(N) 
 
 #generating n smples of stock price at maturity
-S_T <-S_0*exp((r+(log(1-0.15*sigma^2/2)/2))*delta + sigma*sqrt(Y) 
+S_T <-S_0*exp((R+(log(1-0.15*sigma^2/2)/2))*delta + sigma*sqrt(Y) 
 
 #fair price of the European Call option 
 
-EuroCallPayoff<-pmax(S[,d]-K,0)*exp(-r*MT)
+EuroCallPayoff<-pmax(S[,d]-K,0)*exp(-R*MT)
 EuroCallPrice<-mean(EuroCallPayoff)
 
 ExactEuroCall<-S_0*pnorm((log(S_0/K)+(r+sigma^2/2)*MT)/(sigma*sqrt(MT)))-K*exp(-r*MT)*pnorm((log(S_0/K)+(r-sigma^2/2)*MT)/(sigma*sqrt(MT)))
-
 error_EuroCall<-abs(EuroCallPrice-ExactEuroCall)/ExactEuroCall
