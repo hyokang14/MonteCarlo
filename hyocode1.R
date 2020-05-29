@@ -1,3 +1,5 @@
+library(pracma)
+set.seed(1)
 n<-10000 # sample size
 S_0<-50
 d<-12 #time size
