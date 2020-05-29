@@ -17,6 +17,8 @@ for(i in 2:d){
 }
 S<-cbind(rep(S_0,n),S_0*exp((r+log(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
 
+  
+
 #This code Professors code to understand how to do ceiling code for me. please ignore below
 #temp<-apply(S<70,1,sum) #for each sample set, how many days have temperatures less than 70
 #payoff<-temp(>=2)*100 # payoffs for each sample set
