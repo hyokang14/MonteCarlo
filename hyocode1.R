@@ -22,6 +22,18 @@ S<-cbind(rep(S_0,n),S_0*exp((r+log(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
   
 
 #This code Professors code to understand how to do ceiling code for me. please ignore below
+Payoff=S-70
+i=1
+while(i<length(Payoff)+1){
+ if(Payoff[i]<0){
+   Payoff[i]=0
+   }
+ i=i+1
+}
+
+Stdpayoff<-sd(Payoff)
+EstPrice
+
 #temp<-apply(S<70,1,sum) #for each sample set, how many days have temperatures less than 70
 #payoff<-temp(>=2)*100 # payoffs for each sample set
 #stdPayoff<-sd(payoff)
