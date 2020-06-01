@@ -6,6 +6,7 @@ S_0<-50
 d<-12 #time size
 delta<-T/d
 sigma<-0.13
+K<-50
 grid<-matrix(rep(seq(delta,T,length.out=d),n),nrow=n,byrow=TRUE) #time grid as matrix
 S<-matrix(rep(0,n*(d+1)),nrow=n)#create a matrix to store
 r0<-matrix(rep(0.07,(n)),nrow=n)
@@ -23,15 +24,18 @@ S<-cbind(rep(S_0,n),S_0*exp((r+log(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
 
 
 #This code Professors code to understand how to do ceiling code for me. please ignore below
-Payoff=S-70
-i=1
-while(i<length(Payoff)+1){
-  if(Payoff[i]<0){
-    Payoff[i]=0
-  }
-  i=i+1
-}
+#Payoff=S-70
+#i=1
+#while(i<length(Payoff)+1){
+#  if(Payoff[i]<0){
+#    Payoff[i]=0
+#  }
+#  i=i+1
+#}
 
-Stdpayoff<-sd(Payoff)
+#Stdpayoff<-sd(Payoff)
 
-r2<-apply(r,1,cumsum)
+
+Payoff<-pmax(S-K,0)*exp(-apply(r,1,sum)*T)
+
+est.price<-mean(Payoff)
