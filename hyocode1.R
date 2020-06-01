@@ -35,7 +35,12 @@ S<-cbind(rep(S_0,n),S_0*exp((r+log(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
 
 #Stdpayoff<-sd(Payoff)
 
+#r2<-apply(r,1,sum)
+
 
 Payoff<-pmax(S-K,0)*exp(-apply(r,1,sum)*T)
-
+Stdpayoff<-sd(Payoff)
 est.price<-mean(Payoff)
+
+N<-(2.58*1.1*Stdpayoff/(est.price*0.01))^2
+N<-ceiling(N)
