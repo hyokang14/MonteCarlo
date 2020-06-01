@@ -31,6 +31,16 @@ est.price<-mean(Payoff)
 N<-(2.58*1.1*Stdpayoff/(est.price*0.01))^2
 N<-ceiling(N)
 
+#to Dustin, I also got near 40000, so I believe I understand your code, I am trying to do the code under for accept and rejection
+#method what we talked about yesterday. I beilieve we both did correct 
+
+#dustin,Nipah
+#Accept Rejection method, what we talked together yesterday's meeting 
+
+
+
+
+
 
 
 
