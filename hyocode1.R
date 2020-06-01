@@ -83,7 +83,10 @@ N2<-ceiling((n/efficiency)*1.1)
 #xfit<-seq(min(Z),max(Z),length=1000)
 #lines(xfit, 20*xfit*(1-xfit)^3,col='blue',lwd=2)
 
-
+#ExactEuroCall<-S_0*pnorm((log(S_0/K)+(r+sigma^2/2)*MT)/(sigma*sqrt(MT)))-K*exp(-r*MT)*pnorm((log(S_0/K)+(r-sigma^2/2)*MT)/(sigma*sqrt(MT)))
+#ExactEuroPut<-K*exp(-r*MT)*pnorm((log(K/S_0)-(r-sigma^2/2)*MT)/(sigma*sqrt(MT)))-S_0*pnorm((log(K/S_0)-(r+sigma^2/2)*MT)/(sigma*sqrt(MT)))
+#error_EuroPut<-abs(EuroPutPrice-ExactEuroPut)/ExactEuroPut
+#error_EuroCall<-abs(EuroCallPrice-ExactEuroCall)/ExactEuroCall
 
 
 
