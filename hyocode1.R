@@ -21,24 +21,10 @@ for(i in 2:d){
 }
 S<-cbind(rep(S_0,n),S_0*exp((r+log(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
 
-
-
-#This code Professors code to understand how to do ceiling code for me. please ignore below
-#Payoff=S-70
-#i=1
-#while(i<length(Payoff)+1){
-#  if(Payoff[i]<0){
-#    Payoff[i]=0
-#  }
-#  i=i+1
-#}
-
-#Stdpayoff<-sd(Payoff)
-
 #r2<-apply(r,1,sum)
 
 
-Payoff<-pmax(S-K,0)*exp(-apply(r,1,sum)*T)
+Payoff<-pmax(S-K,0)*exp(-apply(r,1,sum)*delta)
 Stdpayoff<-sd(Payoff)
 est.price<-mean(Payoff)
 
