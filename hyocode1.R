@@ -1,6 +1,7 @@
 library(pracma)
 set.seed(1)
 n<-10000 # sample size
+T<-1
 S_0<-50
 d<-12 #time size
 delta<-T/d
@@ -19,23 +20,18 @@ for(i in 2:d){
 }
 S<-cbind(rep(S_0,n),S_0*exp((r+log(1-0.15*sigma^2/2)/0.15)*grid+sigma*Q))
 
-  
+
 
 #This code Professors code to understand how to do ceiling code for me. please ignore below
 Payoff=S-70
 i=1
 while(i<length(Payoff)+1){
- if(Payoff[i]<0){
-   Payoff[i]=0
-   }
- i=i+1
+  if(Payoff[i]<0){
+    Payoff[i]=0
+  }
+  i=i+1
 }
 
 Stdpayoff<-sd(Payoff)
-EstPrice
 
-#temp<-apply(S<70,1,sum) #for each sample set, how many days have temperatures less than 70
-#payoff<-temp(>=2)*100 # payoffs for each sample set
-#stdPayoff<-sd(payoff)
-#EstPrice<-mean(payoff)
-#N<-ceiling((2.58*1.1*stdPayoff/(EstPrice*0.01))^2)
+r2<-apply(r,1,cumsum)
