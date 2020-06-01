@@ -30,3 +30,9 @@ est.price<-mean(Payoff)
 
 N<-(2.58*1.1*Stdpayoff/(est.price*0.01))^2
 N<-ceiling(N)
+
+
+
+
+
+
