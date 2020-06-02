@@ -10,7 +10,7 @@ s0 <- 50
 T <- 1
 sigma <- 0.13
 n <- 10000 # sample size
-d <- 12 # time size
+d <- 52 # time size
 init.r <- 0.07
 delta <- T / d
 grid <- seq(delta, T, length.out = d) # time grid
@@ -105,11 +105,6 @@ toc()
 
 # ---------------------------------------------------------------------------------------------------
 
-# a local maximum of pdf of sqrt(gamma(0.15/delta, 0.15)) / pdf of N(0, 1) 
-# derivative of the above https://www.wolframalpha.com/input/?i=x%5E%28y%2F0.30+-+0.5%29+*+exp%28%28-x%2F0.15%29+%2B+%28x%5E2%2F2%29%29
-# local maximum: https://www.wolframalpha.com/input/?i=max%28e%5E%28-6.66667+x+%2B+x%5E2%2F2%29+x%5E%28-0.5+%2B+3.33333%29%29
-# 0.40622
-#c <- 0.40622
 c <- 3/20
 n.hat <- ceil((1000/(c)) * 1.1)
 top.n <- 1000
@@ -131,6 +126,7 @@ new.g <- c()
 for (i in 1:d) {
   accepts <- na.fill(acceptreject(grid[i], x.hat[, i]), 0)
   # apply accept-reject method to each column to retrieve a "gamma" distr.
+  # this probably isn't right since we have to filter for values > 0 and do a limit.
   new.g <- cbind(new.g, x.hat[, i][which(accepts >= z.hat[, i] & x.hat[,i] > 0)][1:top.n])
 }
 
@@ -144,7 +140,6 @@ r <- cbind(rep(init.r, top.n), 0.02 * sqrt(delta) * z.hat.lim)
 s <- cbind(rep(s0, top.n), exp(sigma * sqrt(new.g) * x.hat.lim))
 #s <- cbind(rep(s0, n), exp(sigma * t(sqrt(apply(g, 1, cumsum)) * apply(x, 1, cumsum))))
 
-
 sampleSim.cv<- simVasicekVarGamma(d, r, s)
 
 payoff.cv <- pmax(sampleSim.cv$s[, ncol(s)] - s0, 0) * exp(-apply(sampleSim.cv$r, 1, sum) * T)
@@ -156,23 +151,23 @@ payoff.sigma.cv <- sd(payoff.cv)
 est.n.cv <- ceiling((2.58 * 1.1 * payoff.sigma.cv / 0.05)^2)
 
 # Now that we know the full N needed to calculate up to the desired accuracy. Do it all over again
-z.full <- matrix(rnorm(est.n * d), nrow = est.n)
-x.full <- matrix(rnorm(est.n * d), nrow = est.n)
+z.full <- matrix(rnorm(est.n.cv * d), nrow = est.n.cv)
+x.full <- matrix(rnorm(est.n.cv * d), nrow = est.n.cv)
 
 new.g.full <- c()
 # loop over columns since we are dealing with a "d" wide matrix
 for (i in 1:d) {
   accepts <- na.fill(acceptreject(grid[i], x.full[, i]), 0)
   # apply accept-reject method to each column to retrieve a "gamma" distr.
-  new.g.full <- cbind(new.g.full, x.full[, i][which(accepts >= z.full[, i] & x.full[,i] > 0)][1:est.n])
+  new.g.full <- cbind(new.g.full, x.full[, i][which(accepts >= z.full[, i] & x.full[,i] > 0)][1:est.n.cv])
 }
 
-z.full <- apply(z.full, 2, function(x) x[1:est.n])
-x.full <- apply(x.full, 2, function(x) x[1:est.n])
+z.full <- apply(z.full, 2, function(x) x[1:est.n.cv])
+x.full <- apply(x.full, 2, function(x) x[1:est.n.cv])
 
-r.full <- cbind(rep(init.r, est.n), 0.02 * sqrt(delta) * t(apply(z.full, 1, cumsum)))
+r.full <- cbind(rep(init.r, est.n.cv), 0.02 * sqrt(delta) * t(apply(z.full, 1, cumsum)))
 # does the cumulative sum rule apply to the Variance-Gamma Model?
-s.full <- cbind(rep(s0, est.n), exp(sigma * sqrt(new.g.full) * x.full))
+s.full <- cbind(rep(s0, est.n.cv), exp(sigma * sqrt(new.g.full) * x.full))
 
 sim <- simVasicekVarGamma(d, r.full, s.full)
 
@@ -180,5 +175,5 @@ payoff.full <- pmax(sim$s[, ncol(s.full)] - s0, 0) * exp(-apply(sim$r, 1, sum) *
 
 est.price <- mean(payoff.full, na.rm = TRUE)
 
-lcl <- est.price - 1.96 * sd(payoff.full, na.rm = TRUE) / sqrt(est.n)
-ucl <- est.price + 1.96 * sd(payoff.full, na.rm = TRUE) / sqrt(est.n)
+lcl <- est.price - 1.96 * sd(payoff.full, na.rm = TRUE) / sqrt(est.n.cv)
+ucl <- est.price + 1.96 * sd(payoff.full, na.rm = TRUE) / sqrt(est.n.cv)
